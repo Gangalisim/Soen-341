@@ -1,13 +1,13 @@
 language: node_js
 node_js: stable
-cache: npm
+cache: yarn
 
 install:
-  - npm ci
+  - yarn ci
 
 script:
-  - npm test
-  - npm run build
+  - yarn test
+  - yarn run build
 
 deploy:
   provider: pages
