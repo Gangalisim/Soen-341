@@ -11,7 +11,7 @@ script:
 
 deploy:
   provider: pages
-  skip-cleanup: true
+  cleanup: true
   github-token: $GITHUB_TOKEN
   on:
-    branch: dev_ginywiny
+    branch: master
