@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/ginywiny/Soen-341/issues"
   },
-  "homepage": "https://github.com/ginywiny/Soen-341#readme"
+  "homepage": "https://github.com/ginywiny/Soen-341#readme",
+  "dependencies": {
+    "npm": "^6.13.7"
+  }
 }
