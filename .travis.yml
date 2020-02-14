@@ -1,13 +1,14 @@
+sudo: false
 language: node_js
-node_js: stable
-cache: yarn
+node_js: 
+  - node
 
 install:
-  - yarn ci
+  - npm ci
 
 script:
-  - yarn test
-  - yarn run build
+  - npm test
+  - npm run build
 
 deploy:
   provider: pages
