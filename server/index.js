@@ -2,10 +2,13 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const app = express();
+const app = express(); //Initialize express
 
 //Mongo Atlas requirements
 const mongoclient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
+const morgan = require('morgan');
+const path = require('path');
 const objectid = require('mongodb').ObjectID;
 const uri = "mongodb+srv://<username>:<password>@cluster0-pf0b2.mongodb.net/test?retryWrites=true&w=majority";
 const userModel = require('./user-schema');
@@ -13,10 +16,18 @@ const userModel = require('./user-schema');
 //Middleware and CORS
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+
+app.use(express.static(path.join(__dirname, '..', 'public' )))
+
 app.use(cors())
 
 
-//Start server
+
+
+
+
+
+//Start server port 8000
 var database, collection;
 const port = process.env.PORT || 8000;
 app.listen(port, () => {
@@ -30,6 +41,8 @@ app.listen(port, () => {
     })
     console.log(`Listening on ${port}`);
 });
+
+app.use(morgan("tiny"));
 
 //Default path
 app.get('/', (req, res) => {
@@ -46,6 +59,7 @@ app.post("/api/user", (request, response) => {
         console.log(`New user created with the following id: ${result.insertedId}`);
     });
 });
+
 //Search for users
 app.get("/api/users", (request, response) => {
     collection.find({}).toArray((error, result) => {
@@ -54,4 +68,12 @@ app.get("/api/users", (request, response) => {
         }
         response.send(result);
     });
+});
+
+//Search for users
+app.get("/api", (request, response) => {
+    const data = {
+        username: "username",
+    }
+        response.send(data);
 });
