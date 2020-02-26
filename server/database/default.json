@@ -1,0 +1,3 @@
+{
+  "ConnectionUrl": "mongodb+srv://<user>:<pass>@cluster0-pf0b2.mongodb.net/test?retryWrites=true&w=majority"
+}

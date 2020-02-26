@@ -1,63 +1,69 @@
 import React, { Component } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Jumbotron } from "react-bootstrap";
+import axios from "axios";
 import "../App.css";
 
-//POST function that uses fetch to send our data.
-async function postData(url = "", data = {}) {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
-    .then(res => res.json())
-    .then(data => {
-      console.log("Success:", data);
-    })
-    .catch(error => {
-      console.log("Error:", error);
-    });
-}
-
 class RenderSignUpForm extends Component {
-  constructor() {
-    super();
-    this.state = {};
-    this.handleSubmit = this.handleSubmit.bind(this);
+  constructor(props) {
+    super(props);
+
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+
+    this.state = {
+      email: "",
+      username: "",
+      password: ""
+    };
   }
+  onChangeEmail(e) {
+    this.setState({ email: e.target.value });
+  }
+  onChangeUsername(e) {
+    this.setState({ username: e.target.value });
+  }
+  onChangePassword(e) {
+    this.setState({ password: e.target.value });
+  }
+  onSubmit(e) {
+    e.preventDefault();
 
-  handleSubmit(event) {
-    event.preventDefault();
-    const data = new FormData(event.target);
+    const user = {
+      email: this.state.email,
+      username: this.state.username,
+      password: this.state.password
+    };
+    console.log("Submitting User Details.");
+    axios
+      .post("http://localhost:8000/signup", user)
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
-    this.setState({
-      res: data
-    });
-    postData("http://localhost:8000/signup", {
-      email: data.get("email"),
-      username: data.get("username"),
-      password: data.get("password")
-    }).then(data => {
-      console.log(data);
-    });
+    this.setState({ email: "", username: "", password: "" });
   }
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <Form onSubmit={this.handleSubmit}>
+          <h1>Sign Up</h1>
+          <br />
+          <Form onSubmit={this.onSubmit}>
             <Form.Group controlId="email">
-              <Form.Label>Email address</Form.Label>
+              <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
                 placeholder="Enter email"
                 name="email"
+                value={this.state.email}
+                onChange={this.onChangeEmail}
               />
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
             </Form.Group>
             <Form.Group controlId="username">
               <Form.Label>Username</Form.Label>
@@ -65,6 +71,8 @@ class RenderSignUpForm extends Component {
                 type="username"
                 placeholder="Enter username"
                 name="username"
+                value={this.state.username}
+                onChange={this.onChangeUsername}
               />
             </Form.Group>
             <Form.Group controlId="password">
@@ -73,20 +81,14 @@ class RenderSignUpForm extends Component {
                 type="password"
                 placeholder="Password"
                 name="password"
+                value={this.state.password}
+                onChange={this.onChangePassword}
               />
             </Form.Group>
             <Button variant="primary" type="submit">
               Submit
             </Button>
           </Form>
-          {/* This is used for testing purposes to see what data is getting sent
-                    {this.state.res && (
-                        <div className="res-block">
-                            <h3><br />Data that will be sent:</h3>
-                            <pre>FormData {this.state.res}</pre>
-                        </div>
-                    )}
-                    */}
         </header>
       </div>
     );

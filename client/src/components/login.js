@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Jumbotron } from "react-bootstrap";
 import axios from "axios";
 import "../App.css";
 
@@ -29,7 +29,6 @@ class RenderLoginForm extends Component {
       username: this.state.username,
       password: this.state.password
     };
-    console.log("submittiing");
     axios
       .post("http://localhost:8000/login", user)
       .then(res => {
@@ -45,6 +44,8 @@ class RenderLoginForm extends Component {
     return (
       <div className="App">
         <header className="App-header">
+          <h1>Log in</h1>
+          <br />
           <Form onSubmit={this.onSubmit}>
             <Form.Group controlId="username">
               <Form.Label>Username</Form.Label>
