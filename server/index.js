@@ -1,26 +1,33 @@
 //Basic requirements
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const app = express();
-const session = require("express-session");
+const express = require('express')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const app = express(); //Initialize express
 
 //Mongo Atlas requirements
-const mongoclient = require("mongodb").MongoClient;
-const objectid = require("mongodb").ObjectID;
-const uri =
-  "mongodb+srv://<username>:<password>@cluster0-pf0b2.mongodb.net/test?retryWrites=true&w=majority";
-const userModel = require("./user-schema");
+const mongoclient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
+const morgan = require('morgan');
+const path = require('path');
+const objectid = require('mongodb').ObjectID;
+const uri = "mongodb+srv://<username>:<password>@cluster0-pf0b2.mongodb.net/test?retryWrites=true&w=majority";
+const userModel = require('./user-schema');
 
 //Middleware and CORS
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(cors());
-app.use(
-  session({ secret: "secretstring", resave: false, saveUninitialized: true })
-);
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
-//Start server
+app.use(express.static(path.join(__dirname, '..', 'public' )))
+
+app.use(cors())
+
+
+
+
+
+
+
+//Start server port 8000
 var database, collection;
 const port = process.env.PORT || 8000;
 app.listen(port, () => {
@@ -34,6 +41,8 @@ app.listen(port, () => {
   });
   console.log(`Listening on ${port}`);
 });
+
+app.use(morgan("tiny"));
 
 //Default path
 app.get("/", (req, res) => {
@@ -80,12 +89,6 @@ app.get("/home", (request, response) => {
   }
 });
 
-//Sign a user out
-app.get("/logout", (request, response) => {
-  request.session.destroy();
-  return res.status(200).send();
-});
-
 //Search for users
 app.get("/search/:users", (request, response) => {
   collection
@@ -96,4 +99,12 @@ app.get("/search/:users", (request, response) => {
       }
       return result;
     });
+});
+
+//Search for users
+app.get("/api", (request, response) => {
+    const data = {
+        username: "username",
+    }
+        response.send(data);
 });
